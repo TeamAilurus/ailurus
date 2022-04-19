@@ -1,10 +1,12 @@
 import { Channel } from '#structures/Channel';
+import { SlashCommandInteraction } from '#structures/CommandInteraction';
 import { Guild } from '#structures/Guild';
+import { Member } from '#structures/Member';
 import { Message } from '#structures/Message';
 import { User } from '#structures/User';
-import type { APIChannel, APIGuild, APIMessage, ReadyGuild, ReadyPayload } from '../../types';
 import { log } from '#utils/logger';
 import { WebSocket } from 'ws';
+import type { APIChannel, APIGuild, APIMessage, ReadyGuild, ReadyPayload, SlashCommand } from '../../types';
 import type { Client } from '../Client';
 
 export class Gateway {
@@ -85,6 +87,7 @@ export class Gateway {
 							}
 							break;
 						}
+						// @ts-ignore shut the fuck up
 						case 'MESSAGE_CREATE': {
 							const apiMessage = buffer.d as APIMessage;
 
@@ -100,6 +103,41 @@ export class Gateway {
 							if (!channel || !guild) throw new Error('Channel or guild not found!');
 							const message = new Message(apiMessage.id, apiMessage.content, guild, channel, user, this.client);
 							this.client.emit('message', message);
+						}
+						case 'INTERACTION_CREATE': {
+							const apiInteraction = buffer.d as SlashCommand;
+
+							const channel = this.client.channels.get(apiInteraction.channel_id);
+							const guild = this.client.guilds.get(apiInteraction.guild_id);
+
+							const member = new Member(
+								null, // Roles aren't implemented yet
+								apiInteraction.member.premium_since,
+								apiInteraction.member.pending,
+								apiInteraction.member.nick,
+								apiInteraction.member.mute,
+								apiInteraction.member.joined_at,
+								apiInteraction.member.hoisted_role,
+								apiInteraction.member.flags,
+								apiInteraction.member.deaf,
+								apiInteraction.member.communication_disabled_until,
+								apiInteraction.member.avatar,
+								null // Fetch User here
+							);
+
+							if (!channel || !guild) throw new Error('Channel or guild not found!');
+							const message = new SlashCommandInteraction(
+								apiInteraction.token,
+								member,
+								apiInteraction.locale,
+								apiInteraction.id,
+								apiInteraction.guild_locale,
+								guild,
+								apiInteraction.data,
+								channel,
+								this.client
+							);
+							this.client.emit('slashCommand', message);
 						}
 					}
 				}

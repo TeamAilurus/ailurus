@@ -1,11 +1,11 @@
 import type { Client } from '#client/Client';
-import type { APIMessage } from '../types';
-import type { Guild } from '#structures/Guild';
 import { Base } from '#structures/Base';
 import type { Channel } from '#structures/Channel';
+import type { Guild } from '#structures/Guild';
 import { User } from '#structures/User';
 import { log } from '#utils/logger';
 import { fetch } from 'undici';
+import type { APIMessage } from '../types';
 
 export class Message extends Base {
 	public constructor(
