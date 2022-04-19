@@ -4,17 +4,17 @@ export interface ClientOptions {
 }
 
 export interface EmbedOptions {
-	title: null | String
+	title: String | null
 	type: "rich"
-	description: null | String
-	url: null | String
-	timestamp: null //idk how to type this
+	description: String | null
+	url: String | null
+	timestamp: Number | null
 	color: String | null
-	footer: null | Object
-	image: null | Object
-	thumbnail: null | Object
-	video: null | Object
-	provider: null | Object
-	author: null | Object
+	footer: Object |null
+	image: Object | null
+	thumbnail: Object | null
+	video: Object | null
+	provider: Object | null
+	author: Object | null
 	fields: []
 }
