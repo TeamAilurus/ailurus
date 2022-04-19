@@ -76,7 +76,7 @@ export class Gateway {
 
 								this.client.channels = new Map([...g.channels.entries(), ...this.client.channels.entries()])
 
-								this.readyGuilds = this.readyGuilds.filter((x) => x.id !== apiGuild.id);
+								this.readyGuilds = this.readyGuilds.filter((x) => x.id !== g.id);
 								if (this.readyGuilds.length === 0) this.client.emit("ready"), log({ state: 'WS', message: 'Guilds loaded' });
 							}
 							break;
