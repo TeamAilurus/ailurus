@@ -1,7 +1,7 @@
 # Ailurus
 
-Ailurus is a TypeScript Node.js Discord API framework.
+Ailurus is a work in progress TypeScript Node.js Discord API framework. We appreciate contributions from the community!
 
-## Todo
+## Broken stuff needing fixs
 
 -   [ ] Fix the Message structure (guild cannot be found)

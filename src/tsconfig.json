@@ -1,0 +1,17 @@
+{
+	"extends": "../tsconfig.base.json",
+	"compilerOptions": {
+		"rootDir": "./",
+		"baseUrl": "./",
+		"outDir": "../dist",
+		"composite": true,
+		"preserveConstEnums": true,
+		"useDefineForClassFields": false,
+		"paths": {
+			"#structures/*": ["structures/*"],
+			"#client/*": ["client/*"],
+			"#utils/*": ["utils/*"]
+		}
+	},
+	"include": ["."]
+}
