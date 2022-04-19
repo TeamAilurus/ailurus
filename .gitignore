@@ -47,3 +47,5 @@ apps/web/.sentryclirc
 .idea
 .vscode
 apps/bot/.env
+*.tsbuildinfo
+apps/bot/.env

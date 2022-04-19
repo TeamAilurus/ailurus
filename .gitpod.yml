@@ -4,6 +4,6 @@
 
 tasks:
   - init: yarn install
-    command: yarn run watch
+    command: yarn run start
 
 
