@@ -48,3 +48,4 @@ apps/web/.sentryclirc
 .vscode
 apps/bot/.env
 *.tsbuildinfo
+apps/bot/.env
