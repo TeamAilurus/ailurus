@@ -67,6 +67,7 @@ export class Gateway {
 						case 'READY': {
 							const readyPayload = buffer.d as ReadyPayload;
 							this.readyGuilds = readyPayload.guilds;
+
 							break;
 						}
 						case 'GUILD_CREATE': {
@@ -81,7 +82,7 @@ export class Gateway {
 								});
 
 								this.readyGuilds = this.readyGuilds.filter((x) => x.id !== apiGuild.id);
-								if (this.readyGuilds.length === 0) log({ state: 'WS', message: 'Guilds loaded' });
+								if (this.readyGuilds.length === 0) this.client.emit("ready"), log({ state: 'WS', message: 'Guilds loaded' });
 							}
 							break;
 						}
