@@ -9,6 +9,6 @@ export class Channel extends Base {
 	public constructor(data: APIChannel, public guild: Guild, client: Client) {
 		super(client);
 
-		this.id = data.id
+		this.id = data.id;
 	}
 }

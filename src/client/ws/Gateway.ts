@@ -1,9 +1,9 @@
 import { Guild } from '#structures/Guild';
 import { Message } from '#structures/Message';
 import { User } from '#structures/User';
-import type { APIMessage, ReadyGuild, ReadyPayload } from '../../types';
 import { log } from '#utils/logger';
 import { WebSocket } from 'ws';
+import type { APIMessage, ReadyGuild, ReadyPayload } from '../../types';
 import type { Client } from '../Client';
 
 export class Gateway {
@@ -74,10 +74,10 @@ export class Gateway {
 								const g = new Guild(buffer.d, this.client);
 								this.client.guilds.set(g.id, g);
 
-								this.client.channels = new Map([...g.channels.entries(), ...this.client.channels.entries()])
+								this.client.channels = new Map([...g.channels.entries(), ...this.client.channels.entries()]);
 
 								this.readyGuilds = this.readyGuilds.filter((x) => x.id !== g.id);
-								if (this.readyGuilds.length === 0) this.client.emit("ready"), log({ state: 'WS', message: 'Guilds loaded' });
+								if (this.readyGuilds.length === 0) this.client.emit('ready'), log({ state: 'WS', message: 'Guilds loaded' });
 							}
 							break;
 						}

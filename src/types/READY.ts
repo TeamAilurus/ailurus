@@ -1,4 +1,4 @@
-import type { APIUser } from ".";
+import type { APIUser } from '.';
 
 export interface ReadyPayload {
 	user: APIUser;
