@@ -7,9 +7,11 @@
 		"composite": true,
 		"preserveConstEnums": true,
 		"useDefineForClassFields": false,
+		"noImplicitReturns": true,
 		"paths": {
 			"#structures/*": ["structures/*"],
 			"#client/*": ["client/*"],
+			"#types/*": ["types/*"],
 			"#utils/*": ["utils/*"]
 		}
 	},
