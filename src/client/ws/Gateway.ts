@@ -67,6 +67,8 @@ export class Gateway {
 						case 'READY': {
 							const readyPayload = buffer.d as ReadyPayload;
 							this.readyGuilds = readyPayload.guilds;
+
+							this.client.emit("ready")
 							break;
 						}
 						case 'GUILD_CREATE': {
