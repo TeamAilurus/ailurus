@@ -6,7 +6,6 @@ import type { Guild } from './Guild';
 export class Channel extends Base {
 	public id: string;
 
-	// TODO: UPDATE TYPE
 	public constructor(data: APIChannel, public guild: Guild, client: Client) {
 		super(client);
 

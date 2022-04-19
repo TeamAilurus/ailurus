@@ -8,7 +8,6 @@ export class Guild extends Base {
 	public name: string;
 	public channels: Map<string, Channel>;
 
-	// TODO: UPDATE TYPE
 	public constructor(public data: APIGuild, client: Client) {
 		super(client);
 
