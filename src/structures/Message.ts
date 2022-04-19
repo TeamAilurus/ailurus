@@ -38,15 +38,11 @@ export class Message extends Base {
 		if (res.ok) {
 			const apiMessage = (await res.json()) as APIMessage;
 
-			const channel = this.client.channels.get(apiMessage.channel_id);
-			const guild = this.client.guilds.get(apiMessage.guild_id);
 			const user = new User(apiMessage.author.id, apiMessage.author.username, apiMessage.author.discriminator, apiMessage.author.bot);
 
-			if (!channel) throw new Error('Channel not found');
-			if (!guild) throw new Error('Guild not found');
 			if (!user) throw new Error('User not found');
 
-			return new Message(apiMessage.id, apiMessage.content, guild, channel, user, this.client, this.id);
+			return new Message(apiMessage.id, apiMessage.content, this.guild, this.channel, user, this.client, this.id);
 		}
 
 		const json = await res.json();
