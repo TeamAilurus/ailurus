@@ -1,48 +1,13 @@
-import Channel from '#structures/Channel';
-import Guild from '#structures/Guild';
-import Message from '#structures/Message';
-import User from '#structures/User';
+import { Channel } from '#structures/Channel';
+import { Guild } from '#structures/Guild';
+import { Message } from '#structures/Message';
+import { User } from '#structures/User';
+import type { APIChannel, APIGuild, APIMessage, ReadyGuild, ReadyPayload } from '../../types';
+import { log } from '#utils/logger';
 import { WebSocket } from 'ws';
-import type Client from '../Client';
+import type { Client } from '../Client';
 
-interface APIGuild {
-	id: string;
-	name: string;
-	icon?: string;
-	channels: APIChannel[];
-}
-
-interface APIUser {
-	username: string;
-	discriminator: string;
-	id: string;
-	bot: boolean;
-}
-
-export interface APIMessage {
-	id: string;
-	content: string;
-	guild_id: string;
-	channel_id: string;
-	author: APIUser;
-}
-
-interface APIChannel {
-	id: string;
-	name: string;
-}
-
-interface ReadyPayload {
-	user: APIUser;
-	guilds: ReadyGuild[];
-}
-
-interface ReadyGuild {
-	id: string;
-	unavailable: true;
-}
-
-export default class Gateway {
+export class Gateway {
 	private HEARTBEAT_INTERVAL = 0;
 	private lastSequence: number | undefined;
 	private lastHeartbeat = 0;
@@ -57,24 +22,20 @@ export default class Gateway {
 
 	private _init() {
 		this.socket.addEventListener('open', () => {
-			console.log('Connected to discord!');
+			log({ state: 'WS', message: 'Connected to API' });
 		});
 
 		this.socket.addEventListener('message', (message) => {
-			// eslint-disable-next-line @typescript-eslint/no-base-to-string
-			const buffer = JSON.parse(message.data.toString());
-			console.log(buffer);
+			const buffer = JSON.parse((message.data as string | Buffer | Buffer[]).toString());
+			log({ state: 'WS', json: buffer });
 
 			if (buffer.s) this.lastSequence = buffer.s;
 
 			if (this.HEARTBEAT_INTERVAL === 0 && buffer.op === 10) {
 				this.HEARTBEAT_INTERVAL = buffer.d.heartbeat_interval;
 
-				console.log(`Sending a heartbeat every ${this.HEARTBEAT_INTERVAL}ms + jitter time.`);
-
-				// Time to identify
-
-				console.log('Identifiying..');
+				log({ state: 'WS', message: `Sending a heartbeat every ${this.HEARTBEAT_INTERVAL}ms + jitter time` });
+				log({ state: 'WS', message: 'Identifiying' });
 
 				this.socket.send(
 					JSON.stringify({
@@ -91,24 +52,21 @@ export default class Gateway {
 					})
 				);
 
-				console.log('Identified with discord!');
+				log({ state: 'WS', message: 'Identified' });
 
 				return this.heartbeat();
 			}
 
+			if (buffer.op === 11) {
+				log({ state: 'WS', message: `Heartbeat acknowledged in ${Date.now() - this.lastHeartbeat}ms` });
+			}
+
 			switch (buffer.op) {
-				// @ts-ignore any
-				case 11: {
-					console.log(`Heartbeat acknowledged in ${Date.now() - this.lastHeartbeat}ms`);
-				}
 				case 0: {
 					switch (buffer.t) {
 						case 'READY': {
 							const readyPayload = buffer.d as ReadyPayload;
-
 							this.readyGuilds = readyPayload.guilds;
-
-							// const clientUser = new User(readyPayload.user.id, readyPayload.user.username, readyPayload.user.discriminator, readyPayload.user.bot)
 							break;
 						}
 						case 'GUILD_CREATE': {
@@ -118,14 +76,12 @@ export default class Gateway {
 								const g = new Guild(apiGuild.id, apiGuild.name, this.client);
 								this.client.guilds.set(g.id, g);
 
-								apiGuild.channels.forEach((apiChannel) => {
-									// TODO: Remove ts-ignore
-									// @ts-ignore above
+								apiGuild.channels.forEach((apiChannel: APIChannel) => {
 									this.client.channels.set(apiChannel.id, new Channel(apiChannel.id, g, apiChannel.name, this.client));
 								});
 
 								this.readyGuilds = this.readyGuilds.filter((x) => x.id !== apiGuild.id);
-								if (this.readyGuilds.length === 0) console.log('Ready!');
+								if (this.readyGuilds.length === 0) log({ state: 'WS', message: 'Guilds loaded' });
 							}
 							break;
 						}
@@ -142,7 +98,6 @@ export default class Gateway {
 							);
 
 							if (!channel || !guild) throw new Error('Channel or guild not found!');
-							// @ts-ignore debug
 							const message = new Message(apiMessage.id, apiMessage.content, guild, channel, user, this.client);
 							this.client.emit('message', message);
 						}
@@ -161,7 +116,7 @@ export default class Gateway {
 				})
 			);
 
-			console.log('Heartbeating..');
+			log({ state: 'WS', message: 'Heartbeating' });
 			this.lastHeartbeat = Date.now();
 
 			this.heartbeat();

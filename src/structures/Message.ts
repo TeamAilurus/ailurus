@@ -1,12 +1,13 @@
-import type Client from '#client/Client';
-import type { APIMessage } from '#client/ws/Gateway';
-import type Guild from '#structures//Guild';
-import Base from '#structures/Base';
-import type Channel from '#structures/Channel';
-import User from '#structures/User';
+import type { Client } from '#client/Client';
+import type { APIMessage } from '../types';
+import type { Guild } from '#structures/Guild';
+import { Base } from '#structures/Base';
+import type { Channel } from '#structures/Channel';
+import { User } from '#structures/User';
+import { log } from '#utils/logger';
 import { fetch } from 'undici';
 
-export default class Message extends Base {
+export class Message extends Base {
 	public constructor(
 		public id: string,
 		public content: string,
@@ -45,12 +46,11 @@ export default class Message extends Base {
 			if (!guild) throw new Error('Guild not found');
 			if (!user) throw new Error('User not found');
 
-			// @ts-ignore Needs to be fixed
 			return new Message(apiMessage.id, apiMessage.content, guild, channel, user, this.client, this.id);
 		}
 
 		const json = await res.json();
-		console.log(json);
+		log({ state: 'DEBUG', json });
 
 		throw new Error(`${res.status} ${res.statusText}`);
 	}
