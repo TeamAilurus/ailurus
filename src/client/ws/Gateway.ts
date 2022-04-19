@@ -1,8 +1,7 @@
-import { Channel } from '#structures/Channel';
 import { Guild } from '#structures/Guild';
 import { Message } from '#structures/Message';
 import { User } from '#structures/User';
-import type { APIChannel, APIGuild, APIMessage, ReadyGuild, ReadyPayload } from '../../types';
+import type { APIMessage, ReadyGuild, ReadyPayload } from '../../types';
 import { log } from '#utils/logger';
 import { WebSocket } from 'ws';
 import type { Client } from '../Client';
@@ -67,20 +66,17 @@ export class Gateway {
 						case 'READY': {
 							const readyPayload = buffer.d as ReadyPayload;
 							this.readyGuilds = readyPayload.guilds;
+
 							break;
 						}
 						case 'GUILD_CREATE': {
-							const apiGuild = buffer.d as APIGuild;
-
 							if (this.readyGuilds.length > 0) {
-								const g = new Guild(apiGuild.id, apiGuild.name, this.client);
+								const g = new Guild(buffer.d, this.client);
 								this.client.guilds.set(g.id, g);
 
-								apiGuild.channels.forEach((apiChannel: APIChannel) => {
-									this.client.channels.set(apiChannel.id, new Channel(apiChannel.id, g, apiChannel.name, this.client));
-								});
+								this.client.channels = new Map([...g.channels.entries(), ...this.client.channels.entries()])
 
-								this.readyGuilds = this.readyGuilds.filter((x) => x.id !== apiGuild.id);
+								this.readyGuilds = this.readyGuilds.filter((x) => x.id !== g.id);
 								if (this.readyGuilds.length === 0) log({ state: 'WS', message: 'Guilds loaded' });
 							}
 							break;
