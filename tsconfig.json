@@ -1,8 +1,22 @@
 {
-    "compilerOptions": {
-        "outDir": "dist",
-        "target": "ES2022",
-        "module": "CommonJS",
-        "esModuleInterop": true,
-    }
+	"extends": "@sapphire/ts-config/extra-strict",
+	"compilerOptions": {
+		"target": "ES2022",
+		"module": "CommonJS",
+		"importHelpers": true,
+		"noEmitHelpers": true,
+		"importsNotUsedAsValues": "error",
+		"emitDecoratorMetadata": true,
+		"experimentalDecorators": true,
+		"esModuleInterop": true,
+		"outDir": "dist",
+		"rootDir": "./src",
+		"baseUrl": "./src",
+		"paths": {
+			"#structures/*": ["structures/*"],
+			"#client/*": ["client/*"],
+			"#utils/*": ["utils/*"]
+		}
+	},
+	"include": ["./**/*.ts"]
 }

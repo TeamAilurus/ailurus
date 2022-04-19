@@ -1,12 +1,13 @@
-import "dotenv/config";
-import Client from "./Client";
-import Message from "./structs/Message";
+import Client from '#client/Client';
+import type Message from '#structures/Message';
+import 'dotenv/config';
 
-const client = new Client(process.env.DISCORD_TOKEN);
+const client = new Client();
 
-client.on("message", (message: Message) => {
-  console.log(message.content);
-  if (message.author.bot) return;
+client.on('message', (message: Message) => {
+	console.log(message.content);
+	if (message.author.bot) return;
 
-  if (message.content === "ping") return message.reply("pong!");
+	if (message.content === 'ai!ping') return message.reply('pong!');
+	return;
 });
