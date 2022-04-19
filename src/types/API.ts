@@ -3,6 +3,22 @@ export interface APIGuild {
 	name: string;
 	icon?: string;
 	channels: APIChannel[];
+	roles: APIRole[];
+}
+
+export interface APIRole {
+	id: string;
+	name: string;
+	color: number;
+	hoist: boolean;
+	icon?: string;
+	unicode_emoji?: string;
+	position: number;
+	permissions: string;
+	managed: boolean;
+	mentionable: boolean;
+	// TODO: type this properly
+	tags: Record<string, any>;
 }
 
 export interface APIUser {
