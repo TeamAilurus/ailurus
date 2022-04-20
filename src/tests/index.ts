@@ -6,6 +6,10 @@ const client = new Client({
 	intents: 131071 // All intents
 });
 
+client.on('ready', () => {
+	console.log('Bot Initalized');
+});
+
 client.on('message', (message: Message) => {
 	// Only run if the user isn't a webhook
 	if (!(message.author instanceof User)) return;
