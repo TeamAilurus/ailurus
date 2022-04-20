@@ -11,7 +11,7 @@ export class Client extends EventEmitter {
 	public readonly token = env.DISCORD_TOKEN as string;
 	public readonly guilds = new Map<string, Guild>();
 	public readonly channels = new Map<string, Channel>();
-	private readonly intents: number;
+	public intents: number;
 
 	public constructor(options: ClientOptions) {
 		super();
@@ -19,6 +19,6 @@ export class Client extends EventEmitter {
 	}
 
 	public login(token?: string) {
-		this.gateway._init((token ??= this.token), this.intents);
+		this.gateway._init((token ??= this.token));
 	}
 }

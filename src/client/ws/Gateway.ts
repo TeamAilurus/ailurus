@@ -15,7 +15,7 @@ export class Gateway {
 
 	public constructor(private client: Client) {}
 
-	public _init(token: string, intents: number) {
+	public _init(token: string) {
 		this.socket.addEventListener('open', () => {
 			log({ state: 'WS', message: 'Connected to API' });
 		});
@@ -36,7 +36,7 @@ export class Gateway {
 					op: 2,
 					d: {
 						token,
-						intents,
+						intents: this.client.intents,
 						properties: {
 							$os: process ? process.platform : 'ailurus',
 							$browser: 'ailurus',
