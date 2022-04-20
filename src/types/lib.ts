@@ -6,7 +6,7 @@ export interface ClientOptions {
 export const enum RequestMethod {
 	Delete = 'DELETE',
 	Get = 'GET',
-	Patch = 'PATH',
+	Patch = 'PATCH',
 	Post = 'POST',
 	Put = 'PUT'
 }
