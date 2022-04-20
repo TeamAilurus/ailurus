@@ -1,30 +1,34 @@
 import type { Client } from '#client/Client';
-import { Base } from '#structures/Base';
-import type { Channel } from '#structures/Channel';
-import type { Guild } from '#structures/Guild';
 import { User } from '#structures/User';
 import { log } from '#utils/logger';
-import type { APIMessage } from 'discord-api-types/v10';
+import type { APIMessage, RESTPostAPIChannelMessageJSONBody, Snowflake } from 'discord-api-types/v10';
 import { fetch } from 'undici';
-
+import { Base } from './Base';
+import type { Channel } from './Channel';
+import type { Guild } from './Guild';
 export class Message extends Base {
-	public constructor(
-		public id: string,
-		public content: string,
-		public guild: Guild,
-		public channel: Channel,
-		public author: User,
-		client: Client,
-		public reference?: string
-	) {
+	public id: Snowflake = this.data.id;
+	public content: string = this.data.content;
+	public guild: Guild | undefined = this.data.guild_id ? this.client.guilds.get(this.data.guild_id) : undefined;
+	public channel: Channel | undefined = this.client.channels.get(this.data.channel_id);
+	public author: User | undefined = new User(
+		this.data.author.id,
+		this.data.author.username,
+		this.data.author.discriminator,
+		this.data.author.bot || false
+	);
+
+	public constructor(private data: APIMessage, client: Client) {
 		super(client);
 	}
 
-	public async reply(content: string) {
+	public async reply(payload: RESTPostAPIChannelMessageJSONBody) {
+		if (!this.channel) throw new Error('Cannot reply to a message that does not have a channel.');
+
 		const res = await fetch(`https://discord.com/api/v10/channels/${this.channel.id}/messages`, {
 			method: 'POST',
 			body: JSON.stringify({
-				content,
+				...payload,
 				message_reference: {
 					message_id: this.id
 				}
@@ -42,7 +46,7 @@ export class Message extends Base {
 
 			if (!user) throw new Error('User not found');
 
-			return new Message(apiMessage.id, apiMessage.content, this.guild, this.channel, user, this.client, this.id);
+			return new Message(apiMessage, this.client);
 		}
 
 		const json = await res.json();

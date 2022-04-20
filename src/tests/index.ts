@@ -1,12 +1,12 @@
-import { Client } from '..';
-import type { Message } from '..';
 import 'dotenv/config';
+import type { Message } from '..';
+import { Client } from '..';
 
 const client = new Client();
 
 client.on('message', (message: Message) => {
-	console.log(message.content);
-	if (message.author.bot) return;
-
-	if (message.content === 'ai!ping') void message.reply('pong!');
+	if (message.content === 'ai!ping')
+		void message.reply({
+			content: 'pong!'
+		});
 });
