@@ -1,7 +1,7 @@
-import { log } from '../../utils/logger';
 import type { APIMessage, APIUnavailableGuild, GatewayReadyDispatch } from 'discord-api-types/v10';
 import { WebSocket } from 'ws';
 import { Guild, Message } from '../../structures';
+import { log } from '../../utils/logger';
 import type { Client } from '../Client';
 
 export class Gateway {
@@ -68,7 +68,7 @@ export class Gateway {
 								const g = new Guild(buffer.d, this.client);
 								this.client.guilds.set(g.id, g);
 
-								this.client.channels = new Map([...g.channels.entries(), ...this.client.channels.entries()]);
+								g.channels.forEach((c) => this.client.channels.set(c.id, c));
 
 								this.readyGuilds = this.readyGuilds.filter((x) => x.id !== g.id);
 								if (this.readyGuilds.length === 0) this.client.emit('ready'), log({ state: 'WS', message: 'Guilds loaded' });
