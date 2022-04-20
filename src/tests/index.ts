@@ -1,10 +1,11 @@
 import 'dotenv/config';
-import type { Message } from '..';
-import { Client } from '..';
+import { Client, Message, User } from '..';
 
 const client = new Client();
 
 client.on('message', (message: Message) => {
+	// Only run if the user isn't a webhook
+	if (!(message.author instanceof User)) return;
 	if (message.content === 'test message')
 		void message.reply({
 			content: 'pong!'

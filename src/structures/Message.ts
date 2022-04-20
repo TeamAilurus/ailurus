@@ -8,11 +8,14 @@ import type { Channel } from './Channel';
 import type { Guild } from './Guild';
 export class Message extends Base {
 	public id: Snowflake = this.data.id;
+
 	public content: string = this.data.content;
+
 	public guild?: Guild = this.data.guild_id ? this.client.guilds.get(this.data.guild_id) : undefined;
 	public channel?: Channel = this.client.channels.get(this.data.channel_id);
-	public author?: User = new User(this.data.author.id, this.data.author.username, this.data.author.discriminator, this.data.author.bot || false);
-	public webhookID?: Snowflake = this.data.webhook_id;
+
+	public author?: User = new User(this.data.author);
+	public webhookId?: Snowflake = this.data.webhook_id;
 
 	public constructor(private data: APIMessage, client: Client) {
 		super(client);
@@ -38,7 +41,7 @@ export class Message extends Base {
 		if (res.ok) {
 			const apiMessage = (await res.json()) as APIMessage;
 
-			const user = new User(apiMessage.author.id, apiMessage.author.username, apiMessage.author.discriminator, apiMessage.author.bot || false);
+			const user = new User(apiMessage.author);
 
 			if (!user) throw new Error('User not found');
 
