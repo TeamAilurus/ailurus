@@ -1,7 +1,6 @@
-import { Guild } from '#structures/Guild';
-import { Message } from '#structures/Message';
-import { log } from '#utils/logger';
+import { log } from 'console';
 import type { APIMessage, APIUnavailableGuild, GatewayReadyDispatch } from 'discord-api-types/v10';
+import { Guild, Message } from 'structures';
 import { WebSocket } from 'ws';
 import type { Client } from '../Client';
 

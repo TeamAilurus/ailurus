@@ -1,4 +1,4 @@
-import type { Client } from '#client/Client';
+import type { Client } from 'client';
 
 export class Base {
 	public constructor(public client: Client) {

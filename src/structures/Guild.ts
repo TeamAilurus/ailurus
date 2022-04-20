@@ -1,7 +1,7 @@
-import type { Client } from '#client/Client';
-import { Base } from '#structures/Base';
-import { Channel } from '#structures/Channel';
+import type { Client } from 'client';
 import type { APIGuild, Snowflake } from 'discord-api-types/v10';
+import { Base } from './Base';
+import { Channel } from './Channel';
 
 export class Guild extends Base {
 	public readonly id: Snowflake = this.data.id;

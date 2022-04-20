@@ -1,11 +1,11 @@
-import type { Client } from '#client/Client';
-import { User } from '#structures/User';
-import { log } from '#utils/logger';
+import type { Client } from 'client';
+import { log } from 'console';
 import type { APIMessage, RESTPostAPIChannelMessageJSONBody, Snowflake } from 'discord-api-types/v10';
 import { fetch } from 'undici';
 import { Base } from './Base';
 import type { Channel } from './Channel';
 import type { Guild } from './Guild';
+import { User } from './User';
 export class Message extends Base {
 	public readonly id: Snowflake = this.raw.id;
 
