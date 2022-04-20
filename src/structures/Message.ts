@@ -3,6 +3,7 @@ import { APIMessage, RESTPostAPIChannelMessageJSONBody, Routes, Snowflake } from
 import type { Client } from '../client';
 import { Base } from './Base';
 import type { Channel } from './Channel';
+import { GuildMember } from './GuildMember';
 import type { Guild } from './Guild';
 import { User } from './User';
 export class Message extends Base {
@@ -14,6 +15,7 @@ export class Message extends Base {
 	public readonly channel?: Channel = this.client.channels.get(this.raw.channel_id);
 
 	public readonly author?: User = new User(this.raw.author);
+	public readonly member?: GuildMember = this.raw.member ? new GuildMember(this.raw.member, this.author!, this.guild!, this.client) : undefined;
 	public readonly webhookId?: Snowflake = this.raw.webhook_id;
 
 	public constructor(private raw: APIMessage, client: Client) {
