@@ -2,8 +2,8 @@ import { Guild } from '#structures/Guild';
 import { Message } from '#structures/Message';
 import { User } from '#structures/User';
 import { log } from '#utils/logger';
+import type { APIMessage, APIUnavailableGuild, GatewayReadyDispatch } from 'discord-api-types/v10';
 import { WebSocket } from 'ws';
-import type { APIMessage, ReadyGuild, ReadyPayload } from '../../types';
 import type { Client } from '../Client';
 
 export class Gateway {
@@ -11,9 +11,9 @@ export class Gateway {
 	private lastSequence: number | undefined;
 	private lastHeartbeat = 0;
 
-	private readyGuilds: ReadyGuild[] = [];
+	private readyGuilds: APIUnavailableGuild[] = [];
 
-	private socket = new WebSocket('wss://gateway.discord.gg/?v=9&encoding=json');
+	private socket = new WebSocket('wss://gateway.discord.gg/?v=10&encoding=json');
 
 	public constructor(private token: string, private client: Client) {
 		this._init();
@@ -34,14 +34,14 @@ export class Gateway {
 				this.HEARTBEAT_INTERVAL = buffer.d.heartbeat_interval;
 
 				log({ state: 'WS', message: `Sending a heartbeat every ${this.HEARTBEAT_INTERVAL}ms + jitter time` });
-				log({ state: 'WS', message: 'Identifiying' });
+				log({ state: 'WS', message: 'Identifying' });
 
 				this.socket.send(
 					JSON.stringify({
 						op: 2,
 						d: {
 							token: this.token,
-							intents: 513,
+							intents: 33281,
 							properties: {
 								$os: 'linux',
 								$browser: 'Discord iOS',
@@ -64,8 +64,8 @@ export class Gateway {
 				case 0: {
 					switch (buffer.t) {
 						case 'READY': {
-							const readyPayload = buffer.d as ReadyPayload;
-							this.readyGuilds = readyPayload.guilds;
+							const readyPayload = buffer as GatewayReadyDispatch;
+							this.readyGuilds = readyPayload.d.guilds;
 
 							break;
 						}
@@ -85,12 +85,15 @@ export class Gateway {
 							const apiMessage = buffer.d as APIMessage;
 
 							const channel = this.client.channels.get(apiMessage.channel_id);
+
+							if (!apiMessage.guild_id) throw new Error('Direct messages are currently not supported');
+
 							const guild = this.client.guilds.get(apiMessage.guild_id);
 							const user = new User(
 								apiMessage.author.id,
 								apiMessage.author.username,
 								apiMessage.author.discriminator,
-								apiMessage.author.bot
+								apiMessage.author.bot || false
 							);
 
 							if (!channel || !guild) throw new Error('Channel or guild not found!');

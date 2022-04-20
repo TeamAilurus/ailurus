@@ -1,6 +1,6 @@
 import type { Client } from '#client/Client';
 import { Base } from '#structures/Base';
-import type { APIChannel } from '#types/API';
+import type { APIChannel } from 'discord-api-types/v10';
 import type { Guild } from './Guild';
 
 export class Channel extends Base {
