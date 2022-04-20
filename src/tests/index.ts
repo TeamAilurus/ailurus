@@ -24,20 +24,20 @@ client.on('message', (message: Message) => {
 		});
 });
 
-client.on("channelCreate", (channel: Channel) => {
-	console.log(`A new channel called ${channel.name} was created!`)
-})
+client.on('channelCreate', (channel: Channel) => {
+	console.log(`A new channel called ${channel.name} was created!`);
+});
 
-client.on("channelDelete", (channel: Channel) => {
-	console.log(`A channel called ${channel.name} was deleted!`)
-})
+client.on('channelDelete', (channel: Channel) => {
+	console.log(`A channel called ${channel.name} was deleted!`);
+});
 
-client.on("guildCreate", (guild: Guild) => {
-	console.log(`A new guild called ${guild.name} was created!`)
-})
+client.on('guildCreate', (guild: Guild) => {
+	console.log(`A new guild called ${guild.name} was created!`);
+});
 
-client.on("guildDelete", (guild: Guild) => {
-	console.log(`A guild called ${guild.name} was deleted!`)
-})
+client.on('guildDelete', (guild: Guild) => {
+	console.log(`A guild called ${guild.name} was deleted!`);
+});
 
-client.login("OTU3NzEwMDQwNTM2NTkyNDY1.YkCu-w.YLVGAVtZBo65CQreTAK-xlOFNYU");
+client.login();

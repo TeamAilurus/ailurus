@@ -1,4 +1,12 @@
-import { APIMessage, APIUnavailableGuild, ChannelType, GatewayChannelCreateDispatchData, GatewayChannelDeleteDispatchData, GatewayGuildDeleteDispatchData, GatewayReadyDispatch } from 'discord-api-types/v10';
+import {
+	APIMessage,
+	APIUnavailableGuild,
+	ChannelType,
+	GatewayChannelCreateDispatchData,
+	GatewayChannelDeleteDispatchData,
+	GatewayGuildDeleteDispatchData,
+	GatewayReadyDispatch
+} from 'discord-api-types/v10';
 import { WebSocket } from 'ws';
 import { Channel, Guild, Message } from '../../structures';
 import { log } from '../../utils/logger';
@@ -74,7 +82,7 @@ export class Gateway {
 								return;
 							}
 
-							this.client.emit("guildCreate", g);
+							this.client.emit('guildCreate', g);
 							break;
 						}
 						case 'CHANNEL_CREATE': {
@@ -83,12 +91,12 @@ export class Gateway {
 							// Avoiding this until we think about full DM support; will require a refactor on how we handle channels
 							if (payload.type === ChannelType.DM || payload.type === ChannelType.GroupDM || !payload.guild_id) return;
 							const g = this.client.guilds.get(payload.guild_id);
-							if (!g) throw new Error("Unknown guild found on channel creation.");
+							if (!g) throw new Error('Unknown guild found on channel creation.');
 
-							const channel = new Channel(payload, g, this.client)
+							const channel = new Channel(payload, g, this.client);
 
 							this.client.channels.set(channel.id, channel);
-							this.client.emit("channelCreate", channel);
+							this.client.emit('channelCreate', channel);
 							break;
 						}
 						case 'CHANNEL_DELETE': {
@@ -96,7 +104,7 @@ export class Gateway {
 
 							const channel = this.client.channels.get(payload.id);
 							this.client.channels.delete(payload.id);
-							this.client.emit("channelDelete", channel ?? null)
+							this.client.emit('channelDelete', channel ?? null);
 							break;
 						}
 						case 'GUILD_DELETE': {
@@ -104,7 +112,7 @@ export class Gateway {
 
 							const guild = this.client.guilds.get(payload.id);
 							this.client.channels.delete(payload.id);
-							this.client.emit("guildDelete", guild ?? null)
+							this.client.emit('guildDelete', guild ?? null);
 							break;
 						}
 						case 'MESSAGE_CREATE': {
