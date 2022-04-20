@@ -1,7 +1,7 @@
-import { log } from '../../utils/logger';
 import type { APIMessage, APIUnavailableGuild, GatewayReadyDispatch } from 'discord-api-types/v10';
 import { WebSocket } from 'ws';
 import { Guild, Message } from '../../structures';
+import { log } from '../../utils/logger';
 import type { Client } from '../Client';
 
 export class Gateway {
@@ -15,7 +15,7 @@ export class Gateway {
 
 	public constructor(private client: Client) {}
 
-	public _init(token: string) {
+	public _init(token: string, intents: number) {
 		this.socket.addEventListener('open', () => {
 			log({ state: 'WS', message: 'Connected to API' });
 		});
@@ -36,7 +36,7 @@ export class Gateway {
 					op: 2,
 					d: {
 						token,
-						intents: this.client.intents,
+						intents,
 						properties: {
 							$os: process ? process.platform : 'ailurus',
 							$browser: 'ailurus',
@@ -68,7 +68,7 @@ export class Gateway {
 								const g = new Guild(buffer.d, this.client);
 								this.client.guilds.set(g.id, g);
 
-								this.client.channels = new Map([...g.channels.entries(), ...this.client.channels.entries()]);
+								g.channels.forEach((c) => this.client.channels.set(c.id, c));
 
 								this.readyGuilds = this.readyGuilds.filter((x) => x.id !== g.id);
 								if (this.readyGuilds.length === 0) this.client.emit('ready'), log({ state: 'WS', message: 'Guilds loaded' });
