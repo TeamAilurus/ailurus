@@ -38,9 +38,9 @@ export class Gateway {
 						token,
 						intents: this.client.intents,
 						properties: {
-							$os: 'linux',
-							$browser: 'Discord iOS',
-							$device: 'ios'
+							$os: process ? process.platform : 'ailurus',
+							$browser: 'ailurus',
+							$device: 'ailurus'
 						}
 					}
 				});
