@@ -1,7 +1,9 @@
 import 'dotenv/config';
 import { Client, Message, User } from '..';
 
-const client = new Client();
+const client = new Client({
+	intents: 131071
+});
 
 client.on('message', (message: Message) => {
 	// Only run if the user isn't a webhook
@@ -20,3 +22,5 @@ client.on('message', (message: Message) => {
 			]
 		});
 });
+
+client.login();

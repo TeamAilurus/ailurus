@@ -1,4 +1,4 @@
 export interface ClientOptions {
-	token: string;
+	token?: string;
 	intents: number;
 }
