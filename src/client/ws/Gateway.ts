@@ -1,4 +1,4 @@
-import { log } from 'console';
+import { log } from '../../utils/logger';
 import type { APIMessage, APIUnavailableGuild, GatewayReadyDispatch } from 'discord-api-types/v10';
 import { WebSocket } from 'ws';
 import { Guild, Message } from '../../structures';
@@ -13,11 +13,9 @@ export class Gateway {
 
 	private socket = new WebSocket('wss://gateway.discord.gg/?v=10&encoding=json');
 
-	public constructor(private token: string, private client: Client) {
-		this._init();
-	}
+	public constructor(private client: Client) {}
 
-	private _init() {
+	public _init(token: string) {
 		this.socket.addEventListener('open', () => {
 			log({ state: 'WS', message: 'Connected to API' });
 		});
@@ -34,20 +32,18 @@ export class Gateway {
 				log({ state: 'WS', message: `Sending a heartbeat every ${this.HEARTBEAT_INTERVAL}ms + jitter time` });
 				log({ state: 'WS', message: 'Identifying' });
 
-				this.socket.send(
-					JSON.stringify({
-						op: 2,
-						d: {
-							token: this.token,
-							intents: 33281,
-							properties: {
-								$os: 'linux',
-								$browser: 'Discord iOS',
-								$device: 'ios'
-							}
+				this.send({
+					op: 2,
+					d: {
+						token,
+						intents: this.client.intents,
+						properties: {
+							$os: process ? process.platform : 'ailurus',
+							$browser: 'ailurus',
+							$device: 'ailurus'
 						}
-					})
-				);
+					}
+				});
 
 				log({ state: 'WS', message: 'Identified' });
 
@@ -91,14 +87,16 @@ export class Gateway {
 		});
 	}
 
+	private send(options: any) {
+		this.socket.send(JSON.stringify(options));
+	}
+
 	private heartbeat() {
 		setTimeout(() => {
-			this.socket.send(
-				JSON.stringify({
-					op: 1,
-					d: this.lastSequence
-				})
-			);
+			this.send({
+				op: 1,
+				d: this.lastSequence
+			});
 
 			log({ state: 'WS', message: 'Heartbeating' });
 			this.lastHeartbeat = Date.now();
