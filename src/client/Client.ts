@@ -1,6 +1,6 @@
 import { Gateway } from '#client/ws/Gateway';
-import type { Guild } from '#structures/Guild';
 import type { Channel } from '#structures/Channel';
+import type { Guild } from '#structures/Guild';
 import { env } from 'node:process';
 import { EventEmitter } from 'stream';
 import type { ClientOptions } from '../types/LIB';
