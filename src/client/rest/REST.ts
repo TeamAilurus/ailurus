@@ -6,11 +6,11 @@ export class REST {
 	public API_URL = 'https://discord.com/api/v10';
 	public constructor(private client: Client) {}
 
-    public async get(path: string, body: any) {
+	public async get(path: string, body: any) {
 		return this.request(path, body, RequestMethod.Get);
 	}
 
-    public async delete(path: string, body: any) {
+	public async delete(path: string, body: any) {
 		return this.request(path, body, RequestMethod.Delete);
 	}
 
@@ -18,11 +18,11 @@ export class REST {
 		return this.request(path, body, RequestMethod.Post);
 	}
 
-    public async put(path: string, body: any) {
+	public async put(path: string, body: any) {
 		return this.request(path, body, RequestMethod.Put);
 	}
 
-    public async patch(path: string, body: any) {
+	public async patch(path: string, body: any) {
 		return this.request(path, body, RequestMethod.Patch);
 	}
 

@@ -1,5 +1,5 @@
 import { log } from 'console';
-import type { APIMessage, RESTPostAPIChannelMessageJSONBody, Snowflake } from 'discord-api-types/v10';
+import { APIMessage, RESTPostAPIChannelMessageJSONBody, Routes, Snowflake } from 'discord-api-types/v10';
 import type { Client } from '../client';
 import { Base } from './Base';
 import type { Channel } from './Channel';
@@ -24,7 +24,7 @@ export class Message extends Base {
 		if (!this.channel) throw new Error('Cannot reply to a message that does not have a channel.');
 
 		const res = await this.client.rest.post(
-			`/channels/${this.channel.id}/messages`,
+			Routes.channelMessages(this.channel.id),
 			JSON.stringify({
 				...payload,
 				message_reference: {
