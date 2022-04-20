@@ -43,10 +43,10 @@
 		"update": "yarn up \"*\" -i"
 	},
 	"dependencies": {
-		"discord-api-types": "^0.31.2",
 		"dotenv": "^16.0.0",
 		"undici": "^5.0.0",
-		"ws": "^8.5.0"
+		"ws": "^8.5.0",
+		"discord-api-types": "^0.31.2"
 	},
 	"files": [
 		"dist",
