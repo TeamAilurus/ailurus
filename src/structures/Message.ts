@@ -1,7 +1,7 @@
 import type { Client } from '#client/Client';
 import { User } from '#structures/User';
 import { log } from '#utils/logger';
-import type { APIMessage, Snowflake } from 'discord-api-types/v10';
+import type { APIMessage, RESTPostAPIChannelMessageJSONBody, Snowflake } from 'discord-api-types/v10';
 import { fetch } from 'undici';
 import { Base } from './Base';
 import type { Channel } from './Channel';
@@ -17,7 +17,7 @@ export class Message extends Base {
 		super(client);
 	}
 
-	public async reply(payload: Omit<APIMessage, 'message_reference'>) {
+	public async reply(payload: Omit<RESTPostAPIChannelMessageJSONBody, 'message_reference'>) {
 		if (!this.channel) throw new Error('Cannot reply to a message that does not have a channel.');
 
 		const res = await fetch(`https://discord.com/api/v10/channels/${this.channel.id}/messages`, {
