@@ -1,8 +1,9 @@
 import 'dotenv/config';
-import { Client, Message, User } from '..';
+import { Client, Message, User, Channel } from '..';
+import type { Guild } from '../structures';
 
 const client = new Client({
-	intents: 131071
+	intents: 131071 // All intents
 });
 
 client.on('message', (message: Message) => {
@@ -23,4 +24,20 @@ client.on('message', (message: Message) => {
 		});
 });
 
-client.login();
+client.on("channelCreate", (channel: Channel) => {
+	console.log(`A new channel called ${channel.name} was created!`)
+})
+
+client.on("channelDelete", (channel: Channel) => {
+	console.log(`A channel called ${channel.name} was deleted!`)
+})
+
+client.on("guildCreate", (guild: Guild) => {
+	console.log(`A new guild called ${guild.name} was created!`)
+})
+
+client.on("guildDelete", (guild: Guild) => {
+	console.log(`A guild called ${guild.name} was deleted!`)
+})
+
+client.login("OTU3NzEwMDQwNTM2NTkyNDY1.YkCu-w.YLVGAVtZBo65CQreTAK-xlOFNYU");
