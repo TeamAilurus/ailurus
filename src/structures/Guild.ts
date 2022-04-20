@@ -1,5 +1,5 @@
-import type { Client } from 'client';
 import type { APIGuild, Snowflake } from 'discord-api-types/v10';
+import type { Client } from '../client';
 import { Base } from './Base';
 import { Channel } from './Channel';
 

@@ -1,7 +1,7 @@
 import { log } from 'console';
 import type { APIMessage, APIUnavailableGuild, GatewayReadyDispatch } from 'discord-api-types/v10';
-import { Guild, Message } from 'structures';
 import { WebSocket } from 'ws';
+import { Guild, Message } from '../../structures';
 import type { Client } from '../Client';
 
 export class Gateway {

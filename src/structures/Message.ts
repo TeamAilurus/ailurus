@@ -1,7 +1,7 @@
-import type { Client } from 'client';
 import { log } from 'console';
 import type { APIMessage, RESTPostAPIChannelMessageJSONBody, Snowflake } from 'discord-api-types/v10';
 import { fetch } from 'undici';
+import type { Client } from '../client';
 import { Base } from './Base';
 import type { Channel } from './Channel';
 import type { Guild } from './Guild';
