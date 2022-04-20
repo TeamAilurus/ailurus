@@ -28,7 +28,7 @@ export class Gateway {
 			log({ state: 'WS', message: 'Connected to API' });
 		});
 
-		this.socket.addEventListener("close", e => {
+		this.socket.addEventListener('close', e => {
 			throw new Error(`Disconnected from discord for the following reason: ${e.reason} (${e.code})`);
 		});
 
