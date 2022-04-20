@@ -1,12 +1,13 @@
 import { Gateway } from '#client/ws/Gateway';
 import type { Guild } from '#structures/Guild';
 import type { Channel } from '#structures/Channel';
+import { env } from 'node:process';
 import { EventEmitter } from 'stream';
 import type { ClientOptions } from '../types/LIB';
 
 export class Client extends EventEmitter {
 	public gateway: Gateway;
-	public token = process.env.DISCORD_TOKEN as string;
+	public token = env.DISCORD_TOKEN as string;
 	public guilds = new Map<string, Guild>();
 	public channels = new Map<string, Channel>();
 
