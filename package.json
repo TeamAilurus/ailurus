@@ -34,7 +34,7 @@
 		"watch": "tsc-watch --onSuccess 'node dist/tests/index.js'",
 		"test": "tsc -b src && node dist/tests/index.js",
 		"build": "tsc -b src && rollup -c scripts/rollup.bundle.ts && gen-esm-wrapper dist/index.js dist/index.mjs",
-		"prepublishOnly": "rollup-type-bundler -v -e url events",
+		"prepublishOnly": "yarn build",
 		"sversion": "standard-version",
 		"prepare": "husky install .github/husky",
 		"update": "yarn up \"*\" -i"
