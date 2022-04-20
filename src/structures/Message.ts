@@ -7,17 +7,17 @@ import { Base } from './Base';
 import type { Channel } from './Channel';
 import type { Guild } from './Guild';
 export class Message extends Base {
-	public id: Snowflake = this.data.id;
+	public readonly id: Snowflake = this.raw.id;
 
-	public content: string = this.data.content;
+	public content: string = this.raw.content;
 
-	public guild?: Guild = this.data.guild_id ? this.client.guilds.get(this.data.guild_id) : undefined;
-	public channel?: Channel = this.client.channels.get(this.data.channel_id);
+	public readonly guild?: Guild = this.raw.guild_id ? this.client.guilds.get(this.raw.guild_id) : undefined;
+	public readonly channel?: Channel = this.client.channels.get(this.raw.channel_id);
 
-	public author?: User = new User(this.data.author);
-	public webhookId?: Snowflake = this.data.webhook_id;
+	public readonly author?: User = new User(this.raw.author);
+	public readonly webhookId?: Snowflake = this.raw.webhook_id;
 
-	public constructor(private data: APIMessage, client: Client) {
+	public constructor(private raw: APIMessage, client: Client) {
 		super(client);
 	}
 
