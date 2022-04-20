@@ -1,6 +1,14 @@
-import type { APIMessage, APIUnavailableGuild, GatewayReadyDispatch } from 'discord-api-types/v10';
+import {
+	APIMessage,
+	APIUnavailableGuild,
+	ChannelType,
+	GatewayChannelCreateDispatchData,
+	GatewayChannelDeleteDispatchData,
+	GatewayGuildDeleteDispatchData,
+	GatewayReadyDispatch
+} from 'discord-api-types/v10';
 import { WebSocket } from 'ws';
-import { Guild, Message } from '../../structures';
+import { Channel, Guild, Message } from '../../structures';
 import { log } from '../../utils/logger';
 import type { Client } from '../Client';
 
@@ -64,15 +72,47 @@ export class Gateway {
 							break;
 						}
 						case 'GUILD_CREATE': {
+							const g = new Guild(buffer.d, this.client);
+							this.client.guilds.set(g.id, g);
+							g.channels.forEach((c) => this.client.channels.set(c.id, c));
+
 							if (this.readyGuilds.length > 0) {
-								const g = new Guild(buffer.d, this.client);
-								this.client.guilds.set(g.id, g);
-
-								g.channels.forEach((c) => this.client.channels.set(c.id, c));
-
 								this.readyGuilds = this.readyGuilds.filter((x) => x.id !== g.id);
 								if (this.readyGuilds.length === 0) this.client.emit('ready'), log({ state: 'WS', message: 'Guilds loaded' });
+								return;
 							}
+
+							this.client.emit('guildCreate', g);
+							break;
+						}
+						case 'CHANNEL_CREATE': {
+							const payload = buffer.d as GatewayChannelCreateDispatchData;
+
+							// Avoiding this until we think about full DM support; will require a refactor on how we handle channels
+							if (payload.type === ChannelType.DM || payload.type === ChannelType.GroupDM || !payload.guild_id) return;
+							const g = this.client.guilds.get(payload.guild_id);
+							if (!g) throw new Error('Unknown guild found on channel creation.');
+
+							const channel = new Channel(payload, g, this.client);
+
+							this.client.channels.set(channel.id, channel);
+							this.client.emit('channelCreate', channel);
+							break;
+						}
+						case 'CHANNEL_DELETE': {
+							const payload = buffer.d as GatewayChannelDeleteDispatchData;
+
+							const channel = this.client.channels.get(payload.id);
+							this.client.channels.delete(payload.id);
+							this.client.emit('channelDelete', channel ?? null);
+							break;
+						}
+						case 'GUILD_DELETE': {
+							const payload = buffer.d as GatewayGuildDeleteDispatchData;
+
+							const guild = this.client.guilds.get(payload.id);
+							this.client.channels.delete(payload.id);
+							this.client.emit('guildDelete', guild ?? null);
 							break;
 						}
 						case 'MESSAGE_CREATE': {
