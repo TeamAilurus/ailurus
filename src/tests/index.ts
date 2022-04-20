@@ -1,12 +1,22 @@
-import { Client } from '..';
-import type { Message } from '..';
 import 'dotenv/config';
+import { Client, Message, User } from '..';
 
 const client = new Client();
 
 client.on('message', (message: Message) => {
-	console.log(message.content);
-	if (message.author.bot) return;
+	// Only run if the user isn't a webhook
+	if (!(message.author instanceof User)) return;
+	if (message.content === 'test message')
+		void message.reply({
+			content: 'pong!'
+		});
 
-	if (message.content === 'ai!ping') void message.reply('pong!');
+	if (message.content === 'test embed')
+		void message.reply({
+			embeds: [
+				{
+					description: 'hey an embed'
+				}
+			]
+		});
 });

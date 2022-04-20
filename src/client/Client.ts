@@ -1,9 +1,8 @@
-import { Gateway } from '#client/ws/Gateway';
-import type { Guild } from '#structures/Guild';
-import type { Channel } from '#structures/Channel';
 import { env } from 'node:process';
 import { EventEmitter } from 'stream';
+import type { Channel, Guild } from '../structures';
 import type { ClientOptions } from '../types/LIB';
+import { Gateway } from './ws/Gateway';
 
 export class Client extends EventEmitter {
 	public gateway: Gateway;
