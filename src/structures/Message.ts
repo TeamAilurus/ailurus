@@ -11,7 +11,8 @@ export class Message extends Base {
 	public content: string = this.data.content;
 	public guild?: Guild = this.data.guild_id ? this.client.guilds.get(this.data.guild_id) : undefined;
 	public channel?: Channel = this.client.channels.get(this.data.channel_id);
-	public author: User = new User(this.data.author.id, this.data.author.username, this.data.author.discriminator, this.data.author.bot || false);
+	public author?: User = new User(this.data.author.id, this.data.author.username, this.data.author.discriminator, this.data.author.bot || false);
+	public webhookID?: Snowflake = this.data.webhook_id;
 
 	public constructor(private data: APIMessage, client: Client) {
 		super(client);
