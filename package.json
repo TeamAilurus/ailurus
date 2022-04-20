@@ -2,19 +2,22 @@
 	"name": "ailurus",
 	"contributors": [
 		"Tristan Camejo <contact@tristancamejo.com>",
-		"Nciklol <nickpleaseaddyouremail@example.com>"
+		"Nciklol <42541753+Nciklol@users.noreply.github.com>",
+		"GodderE2D <goddere2d@modslides.com>",
+		"Kurp <78627265+Kurpp@users.noreply.github.com>"
 	],
 	"keywords": [
 		"api",
-		"discord",
 		"bot",
+		"discord",
 		"node",
 		"typescript"
 	],
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/TeamEvie/ailurus.git"
+		"url": "https://github.com/TeamAilurus/ailurus.git"
 	},
+	"homepage": "https://github.com/TeamAilurus/ailurus#readme",
 	"version": "0.0.2",
 	"license": "Apache-2.0",
 	"main": "dist/index.js",
