@@ -1,7 +1,7 @@
 import type { Client } from '#client/Client';
 import { Base } from '#structures/Base';
 import { Channel } from '#structures/Channel';
-import type { APIGuild } from '#types/API';
+import type { APIGuild } from 'discord-api-types/v10';
 
 export class Guild extends Base {
 	public id: string;
@@ -13,6 +13,6 @@ export class Guild extends Base {
 
 		this.id = data.id;
 		this.name = data.name;
-		this.channels = new Map(data.channels.map((chan: any) => [chan.id, new Channel(chan, this, client)]));
+		this.channels = new Map(data.channels ? data.channels.map((chan: any) => [chan.id, new Channel(chan, this, client)]) : []);
 	}
 }

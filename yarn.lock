@@ -673,6 +673,7 @@ __metadata:
     "@types/node": ^17.0.25
     "@types/ws": ^8.5.3
     "@typescript-eslint/eslint-plugin": ^5.20.0
+    discord-api-types: ^0.31.2
     dotenv: ^16.0.0
     eslint: ^8.13.0
     eslint-config-prettier: ^8.5.0
@@ -1433,6 +1434,13 @@ __metadata:
   dependencies:
     path-type: ^4.0.0
   checksum: fa05e18324510d7283f55862f3161c6759a3f2f8dbce491a2fc14c8324c498286c54282c1f0e933cb930da8419b30679389499b919122952a4f8592362ef4615
+  languageName: node
+  linkType: hard
+
+"discord-api-types@npm:^0.31.2":
+  version: 0.31.2
+  resolution: "discord-api-types@npm:0.31.2"
+  checksum: 928d4f57f4c1ace0baf1d3b2c3ab4a4a5107f100217ce889a6e00ad365115fd328a0b922dbc62af6b6ccac9552ffd7ec3d07f4c8820502c5b55d9f2e5382dfba
   languageName: node
   linkType: hard
 

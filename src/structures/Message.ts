@@ -1,10 +1,10 @@
 import type { Client } from '#client/Client';
-import type { APIMessage } from '../types';
-import type { Guild } from '#structures/Guild';
 import { Base } from '#structures/Base';
 import type { Channel } from '#structures/Channel';
+import type { Guild } from '#structures/Guild';
 import { User } from '#structures/User';
 import { log } from '#utils/logger';
+import type { APIMessage } from 'discord-api-types/v10';
 import { fetch } from 'undici';
 
 export class Message extends Base {
@@ -38,7 +38,7 @@ export class Message extends Base {
 		if (res.ok) {
 			const apiMessage = (await res.json()) as APIMessage;
 
-			const user = new User(apiMessage.author.id, apiMessage.author.username, apiMessage.author.discriminator, apiMessage.author.bot);
+			const user = new User(apiMessage.author.id, apiMessage.author.username, apiMessage.author.discriminator, apiMessage.author.bot || false);
 
 			if (!user) throw new Error('User not found');
 

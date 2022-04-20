@@ -2,8 +2,9 @@ import { Guild } from '#structures/Guild';
 import { Message } from '#structures/Message';
 import { User } from '#structures/User';
 import { log } from '#utils/logger';
+import type { APIMessage } from 'discord-api-types/v10';
 import { WebSocket } from 'ws';
-import type { APIMessage, ReadyGuild, ReadyPayload } from '../../types';
+import type { ReadyGuild, ReadyPayload } from '../../types';
 import type { Client } from '../Client';
 
 export class Gateway {
@@ -85,12 +86,15 @@ export class Gateway {
 							const apiMessage = buffer.d as APIMessage;
 
 							const channel = this.client.channels.get(apiMessage.channel_id);
+
+							if (!apiMessage.guild_id) throw new Error('Direct messages are currently not supported');
+
 							const guild = this.client.guilds.get(apiMessage.guild_id);
 							const user = new User(
 								apiMessage.author.id,
 								apiMessage.author.username,
 								apiMessage.author.discriminator,
-								apiMessage.author.bot
+								apiMessage.author.bot || false
 							);
 
 							if (!channel || !guild) throw new Error('Channel or guild not found!');
