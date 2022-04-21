@@ -1,6 +1,7 @@
 import 'dotenv/config';
-import { Client, Message, User, Channel } from '..';
+import { Channel, Client, Message, User } from '..';
 import type { Guild } from '../structures';
+import type { Interaction } from '../structures/Interaction';
 
 const client = new Client({
 	intents: 131071 // All intents
@@ -26,6 +27,24 @@ client.on('message', (message: Message) => {
 				}
 			]
 		});
+});
+
+client.on('interaction', (interaction: Interaction) => {
+	void interaction
+		.reply({
+			content: 'pong!',
+			embeds: [
+				{
+					description: 'pong!'
+				}
+			]
+		})
+		.then((m) => {
+			void m.reply({
+				content: 'hey i replied to my own interaction :woosh:'
+			});
+		})
+		.catch(console.error);
 });
 
 client.on('channelCreate', (channel: Channel) => {
