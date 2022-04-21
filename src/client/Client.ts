@@ -1,6 +1,6 @@
 import { env } from 'node:process';
 import { EventEmitter } from 'stream';
-import type { Channel, Guild } from '../structures';
+import type { Channel, Guild, User } from '../structures';
 import type { ClientOptions } from '../types/lib';
 import { REST } from './rest/REST';
 import { Gateway } from './ws/Gateway';
@@ -12,6 +12,8 @@ export class Client extends EventEmitter {
 	public readonly guilds = new Map<string, Guild>();
 	public readonly channels = new Map<string, Channel>();
 	public intents: number;
+
+	public user?: User;
 
 	public constructor(options: ClientOptions) {
 		super();

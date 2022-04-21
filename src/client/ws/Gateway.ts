@@ -8,7 +8,7 @@ import {
 	GatewayReadyDispatch
 } from 'discord-api-types/v10';
 import { WebSocket } from 'ws';
-import { Channel, Guild, Message } from '../../structures';
+import { Channel, Guild, Message, User } from '../../structures';
 import { log } from '../../utils/logger';
 import type { Client } from '../Client';
 
@@ -68,6 +68,7 @@ export class Gateway {
 						case 'READY': {
 							const readyPayload = buffer as GatewayReadyDispatch;
 							this.readyGuilds = readyPayload.d.guilds;
+							this.client.user = new User(readyPayload.d.user);
 
 							break;
 						}
