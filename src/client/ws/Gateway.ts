@@ -1,4 +1,5 @@
 import {
+	APIInteraction,
 	APIMessage,
 	APIUnavailableGuild,
 	ChannelType,
@@ -9,6 +10,7 @@ import {
 } from 'discord-api-types/v10';
 import { WebSocket } from 'ws';
 import { Channel, Guild, Message } from '../../structures';
+import { Interaction } from '../../structures/Interaction';
 import { log } from '../../utils/logger';
 import type { Client } from '../Client';
 
@@ -113,6 +115,13 @@ export class Gateway {
 							const guild = this.client.guilds.get(payload.id);
 							this.client.channels.delete(payload.id);
 							this.client.emit('guildDelete', guild ?? null);
+							break;
+						}
+						case 'INTERACTION_CREATE': {
+							const apiInteraction = buffer.d as APIInteraction;
+
+							const interaction = new Interaction(apiInteraction, this.client);
+							this.client.emit('interaction', interaction);
 							break;
 						}
 						case 'MESSAGE_CREATE': {
