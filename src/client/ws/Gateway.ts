@@ -28,6 +28,10 @@ export class Gateway {
 			log({ state: 'WS', message: 'Connected to API' });
 		});
 
+		this.socket.addEventListener('close', (e) => {
+			throw new Error(`Disconnected from the api for ${e.reason} (${e.code})`);
+		});
+
 		this.socket.addEventListener('message', (message) => {
 			const buffer = JSON.parse((message.data as string | Buffer | Buffer[]).toString());
 			log({ state: 'WS', json: buffer });
