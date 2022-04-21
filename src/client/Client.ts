@@ -1,7 +1,7 @@
 import { env } from 'node:process';
 import { EventEmitter } from 'stream';
 import type { Channel, Guild, User } from '../structures';
-import type { ClientOptions } from '../types/lib';
+import type { ClientOptions, ClientEvents } from '../types/lib';
 import { REST } from './rest/REST';
 import { Gateway } from './ws/Gateway';
 
@@ -18,6 +18,10 @@ export class Client extends EventEmitter {
 	public constructor(options: ClientOptions) {
 		super();
 		this.intents = options.intents || 0;
+	}
+
+	public on<K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => any | PromiseLike<any>) {
+		return super.on(event, listener as (...args: any[]) => any);
 	}
 
 	public login(token?: string) {

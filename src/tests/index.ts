@@ -1,6 +1,5 @@
 import 'dotenv/config';
-import { Client, Message, User, Channel } from '..';
-import type { Guild } from '../structures';
+import { Client, User } from '..';
 
 const client = new Client({
 	intents: 131071 // All intents
@@ -10,7 +9,7 @@ client.on('ready', () => {
 	console.log('Bot Initalized');
 });
 
-client.on('message', (message: Message) => {
+client.on('message', (message) => {
 	// Only run if the user isn't a webhook
 	if (!(message.author instanceof User)) return;
 	if (message.content === 'test message')
@@ -28,19 +27,19 @@ client.on('message', (message: Message) => {
 		});
 });
 
-client.on('channelCreate', (channel: Channel) => {
+client.on('channelCreate', (channel) => {
 	console.log(`A new channel called ${channel.name} was created!`);
 });
 
-client.on('channelDelete', (channel: Channel) => {
+client.on('channelDelete', (channel) => {
 	console.log(`A channel called ${channel.name} was deleted!`);
 });
 
-client.on('guildCreate', (guild: Guild) => {
+client.on('guildCreate', (guild) => {
 	console.log(`A new guild called ${guild.name} was created!`);
 });
 
-client.on('guildDelete', (guild: Guild) => {
+client.on('guildDelete', (guild) => {
 	console.log(`A guild called ${guild.name} was deleted!`);
 });
 
