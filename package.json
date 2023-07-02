@@ -46,7 +46,7 @@
 	"dependencies": {
 		"discord-api-types": "^0.31.2",
 		"dotenv": "^16.0.0",
-		"undici": "^5.0.0",
+		"undici": "^5.8.2",
 		"ws": "^8.5.0"
 	},
 	"files": [
